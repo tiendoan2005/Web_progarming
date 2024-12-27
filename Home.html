@@ -62,9 +62,12 @@
         </div>
         <hr>
         <div id="Find">
-            <div class="find">
-                <input type="text" name="textSearch" id="textSearch" placeholder="Tìm kiếm theo mã sinh viên, tên...">
-                <button type="button" id="btnSearch" onclick="searchStudent()">Tìm kiếm</button>
+            <div>
+                <input type="text" 
+                       name="textSearch" 
+                       id="textSearch" 
+                       placeholder="Tìm kiếm theo mã sinh viên, tên..."
+                       autocomplete="off">
             </div>
         </div>
 
@@ -153,19 +156,20 @@
     </div>
 
     <!-- Popup Xóa Sinh Viên -->
-    <div id="overlayDelete"></div>
-    <div id="deleteStudentPopup">
-        <form id="deleteStudentForm" onsubmit="deleteStudent(event)">
-            <h2>Xóa sinh viên</h2>
-            <label for="code">Mã sinh viên:</label>
-            <input type="text" id="code" required>
-            <div class="button-group">
-                <button type="submit" id="deletePopup">Xóa</button>
-                <button type="button" class="close-btn" onclick="closeDeletePopup()">Đóng</button>
-            </div>
-        </form>
-    </div>
-    <script src="Home.js"></script>
-</body>
+<div id="overlayDelete"></div>
+<div id="deleteStudentPopup">
+    <form id="deleteStudentForm" onsubmit="deleteStudent(event)">
+        <h2>Xóa sinh viên</h2>
+        <label for="code">Mã sinh viên:</label>
+        <input type="text" id="code" name="code" required>
+        <div class="button-group">
+            <button type="submit" id="deletePopup">Xóa</button>
+            <button type="button" class="close-btn" onclick="closeDeletePopup()">Đóng</button>
+        </div>
+    </form>
+</div>
 
+    <script src="Home.js"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+</body>
 </html>
