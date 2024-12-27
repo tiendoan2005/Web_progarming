@@ -25,14 +25,29 @@ function showDeleteStudent() {
     document.getElementById('overlayDelete').style.display = 'block';
     document.getElementById('deleteStudentPopup').style.display = 'block';
 }
+
+// Hiển thị popup EditStudent
+function showEditStudent() {
+    document.getElementById('overlayEdit').style.display = 'block';
+    document.getElementById('editStudentPopup').style.display = 'block';
+}
+
 // Đóng popup
 function closeAddPopup() {
     document.getElementById('overlay').style.display = 'none';
     document.getElementById('addStudentPopup').style.display = 'none';
+    resetForm('addStudentForm');
 }
 function closeDeletePopup() {
     document.getElementById('overlayDelete').style.display = 'none';
     document.getElementById('deleteStudentPopup').style.display = 'none';
+    resetForm('deleteStudentForm');
+}
+
+function closeEditPopup() {
+    document.getElementById('overlayEdit').style.display = 'none';
+    document.getElementById('editStudentPopup').style.display = 'none';
+    resetForm('editStudentForm');
 }
 
 function showStudentManagement() {
@@ -81,6 +96,25 @@ function toggleDarkMode() {
 
     sidebar.classList.toggle('dark-mode');
     table.classList.toggle('dark-mode');
+}
+
+// Thêm event listener với debounce
+document.addEventListener('DOMContentLoaded', function() {
+    const searchInput = document.getElementById('textSearch');
+    const debouncedSearch = debounce(searchStudent, 300); // Đợi 300ms sau khi ngừng gõ
+    
+    searchInput.addEventListener('input', debouncedSearch);
+});
+
+// Hàm chọn hàng trong bảng
+function selectRow(row) {
+    // Bỏ chọn hàng cũ
+    const selectedRow = document.querySelector('tr.selected');
+    if (selectedRow) {
+        selectedRow.classList.remove('selected');
+    }
+    // Chọn hàng mới
+    row.classList.add('selected');
 }
 
 // Hàm thêm sinh viên
@@ -167,42 +201,48 @@ function loadStudents() {
 // Tải danh sách sinh viên khi trang được load
 window.onload = loadStudents;
 
-function editStudent() {
-    alert('Chỉnh sửa thông tin sinh viên!');
-}
-
-// Hàm xóa sinh viên
 function deleteStudent(event) {
     event.preventDefault();
     const studentId = document.getElementById('deleteStudentForm').querySelector('#code').value;
-
-    if (!confirm("Bạn có chắc chắn muốn xóa sinh viên này?")) return;
-
-    fetch("deleteStudent.php", {
-        method: "POST",
-        body: JSON.stringify({ studentId }),
-        headers: { 'Content-Type': 'application/json' }
-    })
-        .then(response => response.json())
-        .then(result => {
-            alert(result.message);
-            if (result.success) {
-                resetForm('deleteStudentForm'); // Reset form xóa
-                closeDeletePopup();
-                loadStudents();
-                window.location.href = 'Home.html'; // Quay về trang chủ
-            }
-        })
-        .catch(error => {
-            console.error("Error:", error);
-            swal({
-                title: "Thông báo!",
-                text: "Xóa sinh viên thất bại!",
-                icon: "error",
-                button: "Ok",
-            });
-        });
+    closeDeletePopup();
+    // Chờ người dùng xác nhận xóa
+    Swal.fire({
+        title: 'Bạn có chắc chắn muốn xóa?',
+        text: 'Bạn sẽ không thể hoàn tác hành động này!',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Có',
+        cancelButtonText: 'Không',
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // Gửi yêu cầu xóa sinh viên nếu người dùng nhấn "Có"
+            fetch("deleteStudent.php", {
+                method: "POST",
+                body: JSON.stringify({ studentId }),
+                headers: { 'Content-Type': 'application/json' }
+            })
+                .then(response => response.json())
+                .then(result => {
+                    alert(result.message);
+                    if (result.success) {
+                        resetForm('deleteStudentForm'); // Reset form xóa
+                        loadStudents(); // Tải lại danh sách sinh viên
+                        window.location.href = 'Home.html'; // Quay về trang chủ
+                    }
+                })
+                .catch(error => {
+                    console.error("Error:", error);
+                    swal({
+                        title: "Thông báo!",
+                        text: "Xóa sinh viên thất bại!",
+                        icon: "error",
+                        button: "Ok",
+                    });
+                });
+        }
+    });
 }
+
 
 // Hàm reset form
 function resetForm(formId) {
@@ -228,7 +268,7 @@ function debounce(func, wait) {
     };
 }
 
-// Sửa lại hàm tìm kiếm
+// Hàm tìm kiếm
 function searchStudent() {
     const keyword = document.getElementById('textSearch').value.trim();
     
@@ -268,21 +308,43 @@ function searchStudent() {
         });
 }
 
-// Thêm event listener với debounce
-document.addEventListener('DOMContentLoaded', function() {
-    const searchInput = document.getElementById('textSearch');
-    const debouncedSearch = debounce(searchStudent, 300); // Đợi 300ms sau khi ngừng gõ
-    
-    searchInput.addEventListener('input', debouncedSearch);
-});
+//Hàm chỉnh sửa sinh viên
+function editStudent(event) {
+    event.preventDefault();
 
-// Hàm chọn hàng trong bảng
-function selectRow(row) {
-    // Bỏ chọn hàng cũ
-    const selectedRow = document.querySelector('tr.selected');
-    if (selectedRow) {
-        selectedRow.classList.remove('selected');
-    }
-    // Chọn hàng mới
-    row.classList.add('selected');
+    const studentCode = document.getElementById("code").value;
+    const name = document.getElementById("name").value;
+    const birthDay = document.getElementById("birthDay").value;
+    const classs = document.getElementById("class").value;
+    const fieldOfStudy = document.getElementById("fos").value;
+
+    // Gửi yêu cầu chỉnh sửa sinh viên
+    fetch('editStudent.php', {
+        method: "POST",
+        body: JSON.stringify({
+            code: studentCode,
+            name: name,
+            birthDay: birthDay,
+            classs: classs,
+            fos: fieldOfStudy
+        }),
+        headers: { 'Content-Type': 'application/json' }
+    })
+        .then(response => response.json())
+        .then(res => {
+            if (res.success) {
+                setTimeout(() => {
+                    resetForm('editStudentForm');
+                    closeEditPopup();
+                    loadStudents();
+                    window.location.href = 'Home.html'; // Quay về trang chủ sau khi chỉnh sửa
+                }, 1000);
+            } else {
+                showPopupAlert(res.message, 'error'); // Hiển thị thông báo lỗi nếu có
+            }
+        })
+        .catch(error => {
+            console.error("Error:", error);
+            showPopupAlert('Lỗi khi chỉnh sửa sinh viên!', 'error');
+        });
 }

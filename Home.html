@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Trang chủ</title>
     <link rel="stylesheet" href="Home.css">
+    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.0/dist/sweetalert2.min.css" rel="stylesheet">
 </head>
 
 <body>
@@ -63,11 +64,8 @@
         <hr>
         <div id="Find">
             <div>
-                <input type="text" 
-                       name="textSearch" 
-                       id="textSearch" 
-                       placeholder="Tìm kiếm theo mã sinh viên, tên..."
-                       autocomplete="off">
+                <input type="text" name="textSearch" id="textSearch" placeholder="Tìm kiếm theo mã sinh viên, tên..."
+                    autocomplete="off">
             </div>
         </div>
 
@@ -120,16 +118,16 @@
                 </div>
             </form>
         </div>
-        <div class="button">
-            <div class="addSinhVien">
-                <button type="button" onclick="showPopup()">Thêm sinh viên</button>
-            </div>
-            <div class="EditSinhVien">
-                <button type="button" onclick="editStudent()">Sửa sinh viên</button>
-            </div>
-            <div class="DeleteSinhVien">
-                <button type="button" onclick="showDeleteStudent()">Xóa sinh viên</button>
-            </div>
+            <div class="button">
+                <div class="addSinhVien">
+                    <button type="button" onclick="showPopup()">Thêm sinh viên</button>
+                </div>
+                <div class="EditSinhVien">
+                    <button type="button" onclick="showEditStudent()">Sửa sinh viên</button>
+                </div>
+                <div class="DeleteSinhVien">
+                    <button type="button" onclick="showDeleteStudent()">Xóa sinh viên</button>
+                </div>
         </div>
     </div>
 
@@ -156,20 +154,43 @@
     </div>
 
     <!-- Popup Xóa Sinh Viên -->
-<div id="overlayDelete"></div>
-<div id="deleteStudentPopup">
-    <form id="deleteStudentForm" onsubmit="deleteStudent(event)">
-        <h2>Xóa sinh viên</h2>
-        <label for="code">Mã sinh viên:</label>
-        <input type="text" id="code" name="code" required>
-        <div class="button-group">
-            <button type="submit" id="deletePopup">Xóa</button>
-            <button type="button" class="close-btn" onclick="closeDeletePopup()">Đóng</button>
-        </div>
-    </form>
-</div>
+    <div id="overlayDelete"></div>
+    <div id="deleteStudentPopup">
+        <form id="deleteStudentForm" onsubmit="deleteStudent(event)">
+            <h2>Xóa sinh viên</h2>
+            <label for="code">Mã sinh viên:</label>
+            <input type="text" id="code" name="code" required>
+            <div class="button-group">
+                <button type="submit" id="deletePopup">Xóa</button>
+                <button type="button" class="close-btn" onclick="closeDeletePopup()">Đóng</button>
+            </div>
+        </form>
+    </div>
 
+    <!-- Popup Chỉnh Sửa Sinh Viên -->
+    <div id="overlayEdit"></div>
+    <div id="editStudentPopup">
+        <form id="editStudentForm" onsubmit="editStudent(event)">
+            <h2>Chỉnh sửa sinh viên</h2>
+            <label for="code">Mã sinh viên:<span style="color: red">*</span></label>
+            <input type="text" id="code" required>
+            <label for="name">Họ và tên:<span style="color: red">*</span></label>
+            <input type="text" id="name" required>
+            <label for="birthDay">Ngày sinh:<span style="color: red">*</span></label>
+            <input type="date" id="birthDay" required>
+            <label for="class">Lớp:<span style="color: red">*</span></label>
+            <input type="text" id="class" required>
+            <label for="fos">Khoa:<span style="color: red">*</span></label>
+            <input type="text" id="fos" required>
+            <div class="button-group">
+                <button type="submit" id="editPopup">Lưu</button>
+                <button type="button" class="close-btn" onclick="closeEditPopup()">Đóng</button>
+            </div>
+        </form>
+    </div>
     <script src="Home.js"></script>
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.0/dist/sweetalert2.min.js"></script>
 </body>
+
 </html>
