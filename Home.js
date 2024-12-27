@@ -132,12 +132,12 @@ function loadStudents() {
                 students.forEach((student, index) => {
                     let row = `
                         <tr>
-                            <td>${student.id}</td>
-                            <td>${student.MaSV}</td>
+                            <td style="text-align: center;">${index + 1}</td>
+                            <td style="text-align: center;">${student.MaSV}</td>
                             <td>${student.HoTen}</td>
-                            <td>${student.NgaySinh}</td>
-                            <td>${student.Lop}</td>
-                            <td>${student.Khoa}</td>
+                            <td style="text-align: center;">${student.NgaySinh}</td>
+                            <td style="text-align: center;">${student.Lop}</td>
+                            <td style="text-align: center;">${student.Khoa}</td>
                         </tr>`;
                     tableStudents.innerHTML += row;
                 });
